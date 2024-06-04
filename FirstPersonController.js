@@ -20,7 +20,6 @@ export function createFirstPersonController(camera, scene)
 
     function controllerUpdate()
     {
-
         if (keys["w"])
         {
             headJoint.position.z -= moveSpeed * Math.cos(headJoint.rotation.y);
@@ -48,12 +47,12 @@ export function createFirstPersonController(camera, scene)
 
     document.body.addEventListener("keydown", (ev)=>
     { 
-        keys[ev.key] = 1;
+        keys[ev.key.toLowerCase()] = 1;
     })
 
     document.body.addEventListener("keyup", (ev)=>
     {
-        keys[ev.key] = 0;
+        keys[ev.key.toLowerCase()] = 0;
     })
 
     document.body.addEventListener("mousedown", (ev)=>{
@@ -68,4 +67,6 @@ export function createFirstPersonController(camera, scene)
             camera.rotation.x = clamp(camera.rotation.x - lookSpeed * ev.movementY, -Math.PI/2, Math.PI/2);
         }
     })
+
+    return headJoint
 }
