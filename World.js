@@ -83,6 +83,35 @@ function box(scene, position, scale, color)
     if (WIREFRAME) scene.add( line );
 }
 
+export function map_sample(tx, tz)
+{
+    tx = Math.round(tx);
+    tz = Math.round(tz);
+
+    let x = 0;
+    let z = 0;
+    for (let i in map)
+    {
+        const c = map[i]
+
+        if (c != ' ' && c != '\n' && c != '\t')
+        {
+            if (x == tx && z == tz)
+                return c;
+        }
+
+        x++;
+
+        if (c == "\n")
+        {
+            x = 0;
+            z ++;
+        }
+    }
+
+    // otherwise return undefined
+}
+
 export function generate(player, scene)
 {
     let x = 0

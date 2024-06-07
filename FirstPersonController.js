@@ -1,4 +1,5 @@
 import { Object3D } from "three";
+import { map_sample } from "./World";
 
 const moveSpeed = .1;
 const lookSpeed = .002;
@@ -18,28 +19,37 @@ export function createFirstPersonController(camera, scene)
 
     let keys = {}
 
+    function move_in_dir(dx, dz)
+    {
+        // extra space around colliders
+        const buffer = 10;
+
+        if (map_sample(headJoint.position.x + buffer*dx, headJoint.position.z + buffer*dz) != '$')
+        {
+            headJoint.position.x += dx;
+            headJoint.position.z += dz;
+        }
+    }
+
     function controllerUpdate()
     {
         if (keys["w"])
         {
-            headJoint.position.z -= moveSpeed * Math.cos(headJoint.rotation.y);
-            headJoint.position.x -= moveSpeed * Math.sin(headJoint.rotation.y);
+            move_in_dir(-moveSpeed * Math.sin(headJoint.rotation.y), -moveSpeed * Math.cos(headJoint.rotation.y))
         }
         if (keys["s"])
         {
-            headJoint.position.z -= moveSpeed * Math.cos(headJoint.rotation.y + Math.PI);
-            headJoint.position.x -= moveSpeed * Math.sin(headJoint.rotation.y + Math.PI);
+            move_in_dir(-moveSpeed * Math.sin(headJoint.rotation.y + Math.PI), -moveSpeed * Math.cos(headJoint.rotation.y + Math.PI))
         }
         if (keys["a"])
         {
-            headJoint.position.z -= moveSpeed * Math.cos(headJoint.rotation.y + Math.PI/2);
-            headJoint.position.x -= moveSpeed * Math.sin(headJoint.rotation.y + Math.PI/2);
+            move_in_dir(-moveSpeed * Math.sin(headJoint.rotation.y + Math.PI/2), -moveSpeed * Math.cos(headJoint.rotation.y + Math.PI/2))
         }
         if (keys["d"])
         {
-            headJoint.position.z -= moveSpeed * Math.cos(headJoint.rotation.y - Math.PI/2);
-            headJoint.position.x -= moveSpeed * Math.sin(headJoint.rotation.y - Math.PI/2);
+            move_in_dir(-moveSpeed * Math.sin(headJoint.rotation.y - Math.PI/2), -moveSpeed * Math.cos(headJoint.rotation.y - Math.PI/2))
         }
+
 
         requestAnimationFrame(controllerUpdate);
     }
